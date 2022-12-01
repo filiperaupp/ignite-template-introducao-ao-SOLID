@@ -1,0 +1,282 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Introdução ao SOLID",
+    "description": "API para estudos dos conceitos do SOLID",
+    "version": "1.0.0",
+    "contact": {
+      "email": "filipe.raupp@hotmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Criar usuário",
+        "description": "Cria um novo usuário no sistema",
+        "requestBody": {
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "John Doe",
+                  "email": "john.doe@john.zz"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cadastro realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "update_at": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "E-mail já está em uso",
+            "content": {
+                "application/json": {
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "default"
+                        }
+                    },
+                    "example": {
+                        "error": "E-mail já está em uso"
+                    }
+                }
+            }
+          }
+        }
+      },
+      "get": {
+        "parameters": [{
+            "in": "header",
+            "name": "user_id",
+            "required": "true",
+            "schema": {
+                "type": "string"
+            }
+        }],
+        "tags": ["Users"],
+        "summary": "Listar usuários",
+        "description": "Lista todos os usuários. Precisa ser um usuário administrador",
+        "responses": {
+          "200": {
+            "description": "Listagem obtida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "admin": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
+                        "type": "string"
+                      },
+                      "update_at": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description": "Usuário não possui permissão",
+            "content": {
+                "application/json": {
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "default"
+                        }
+                    },
+                    "example": {
+                        "error": "Usuário não possui permissão"
+                    }
+                }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "parameters": [{
+            "in": "path",
+            "name": "user_id",
+            "required": "true",
+            "schema": {
+                "type": "string"
+            },
+            "description": "User ID"
+        }],
+        "tags": ["Users"],
+        "summary": "Ver perfil",
+        "description": "Ver detalhes do perfil de um usuário específico",
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "update_at": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description": "Usuário não encontrado",
+            "content": {
+                "application/json": {
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "default"
+                        }
+                    },
+                    "example": {
+                        "error": "Usuário não encontrado"
+                    }
+                }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+        "patch": {
+            "parameters": [{
+                "in": "path",
+                "name": "user_id",
+                "required": "true",
+                "schema": {
+                    "type": "string"
+                },
+                "description": "User ID"
+            }],
+            "tags": ["Users"],
+            "summary": "Tornar admin",
+            "description": "Torna um usuário em admin",
+            "responses": {
+                "200": {
+                  "description": "Usuário modificado para admin",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "admin": {
+                            "type": "boolean"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "update_at": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                    "description": "Usuário não encontrado",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "error": "string"
+                                },
+                                "example": {
+                                    "error": "Usuário não encontrado"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+  }
+}
